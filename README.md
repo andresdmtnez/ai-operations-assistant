@@ -63,12 +63,4 @@ pytest -q
 ```
 All tests should pass (`7 passed`). The test suite uses FastAPI’s `TestClient` and does not require a live PostgreSQL instance because the tables are created automatically and the queries return empty lists when no data is present.
 
-## Future Work (Day 5+)
-
-- Populate the database with seed data.
-- Add create / update / delete endpoints with human‑in‑the‑loop approval.
-- Integrate the AI agent, tools, and RAG components.
-- Connect the Next.js frontend.
-
 ---
-*Generated on Day 4 – API operational and verified.*
