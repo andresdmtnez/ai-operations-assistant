@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
@@ -14,6 +15,15 @@ app = FastAPI(
     title="AI Operations Assistant API",
     description="Operational API for the AI Operations Assistant",
     version="0.1.0",
+)
+
+# CORS configuration – allow all origins for local development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Ensure tables exist (create on startup)
