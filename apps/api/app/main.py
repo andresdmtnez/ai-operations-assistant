@@ -1,6 +1,7 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
 
 from app.api.customers import router as customers_router
@@ -32,16 +33,15 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/health", tags=["health"])
 def health(db: Session = Depends(get_db)):
-    """Health check that also verifies DB connectivity."""
+    """Check API and database connectivity."""
     try:
-        # simple lightweight query using SQLAlchemy text construct
         db.execute(text("SELECT 1"))
-    except Exception:
-        # If the DB check fails we still consider the service healthy for API purposes
-        # (the endpoint test only checks HTTP 200). Detailed health monitoring can be
-        # added later via a dedicated health‑check service.
-        pass
-    # Return only the status field as expected by the existing tests.
+    except SQLAlchemyError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Database unavailable",
+        ) from exc
+
     return {"status": "ok"}
 
 app.include_router(customers_router)

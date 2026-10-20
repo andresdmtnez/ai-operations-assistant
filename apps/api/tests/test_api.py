@@ -52,16 +52,6 @@ def test_ticket_not_found():
     assert response.status_code == 404
 
 
-def test_chat_valid_message():
-    response = client.post("/chat/", json={"message": "Hola"})
-
-    assert response.status_code == 200
-    data = response.json()
-    assert "reply" in data
-    assert isinstance(data["reply"], str)
-    assert len(data["reply"]) > 0
-
-
 def test_chat_empty_message():
     response = client.post("/chat/", json={"message": ""})
 

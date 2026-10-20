@@ -41,7 +41,11 @@ async def chat_llm(request: ChatRequest):
             system_prompt=SYSTEM_PROMPT
         )
         return ChatResponse(reply=reply)
-    except Exception as e:
-        # Check for connection errors specifically if needed, 
-        # but the provider raises for status or generic Exception
-        raise HTTPException(status_code=502, detail=f"Error al procesar solicitud con el LLM: {str(e)}")
+    except Exception:
+        raise HTTPException(
+            status_code=502,
+            detail=(
+                "No se pudo obtener una respuesta del "
+                "modelo de inteligencia artificial."
+            )
+        )
