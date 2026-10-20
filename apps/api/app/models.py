@@ -6,6 +6,7 @@ from sqlalchemy import (
     Text,
     DateTime,
     ForeignKey,
+    func,
 )
 from sqlalchemy.orm import declarative_base
 
@@ -19,7 +20,7 @@ class Customer(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(120), nullable=False)
     email = Column(String(255), nullable=False)
-    created_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.now())
 
 
 class Order(Base):
@@ -33,7 +34,7 @@ class Order(Base):
     )
     status = Column(String(30), nullable=False)
     total_amount = Column(Numeric(12, 2), nullable=False)
-    created_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.now())
 
 
 class Ticket(Base):
@@ -48,4 +49,5 @@ class Ticket(Base):
     subject = Column(String(255), nullable=False)
     status = Column(String(30), nullable=False)
     description = Column(Text)
-    created_at = Column(DateTime)
+    created_at = Column(DateTime, server_default=func.now())
+
