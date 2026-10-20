@@ -1,27 +1,32 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 import os
 
-# Primary DB is PostgreSQL; for local development or when PostgreSQL is not
-# available we fall back to a SQLite file. This allows the seed script and
-# tests to run without requiring an external PostgreSQL server.
-POSTGRES_URL = (
-    "postgresql+psycopg://"
-    "aiassistant:aiassistant_dev@"
-    "127.0.0.1:5432/"
-    "ai_operations"
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+# Database URL must be provided through environment variables.
+# Production/development: PostgreSQL
+# Isolated tests: SQLite, when explicitly configured.
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL no está definida. "
+        "Configura la conexión a la base de datos."
+    )
+
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
 )
-
-DATABASE_URL = os.getenv("DATABASE_URL", POSTGRES_URL)
-
-engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(
     bind=engine,
     autocommit=False,
     autoflush=False,
 )
+
 
 def get_db():
     db = SessionLocal()
