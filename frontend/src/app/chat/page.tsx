@@ -1,10 +1,12 @@
+'use client';
+
 import React from 'react';
+import { ChatWindow } from '@/components/ChatWindow';
 
 export default function ChatPage() {
   return (
-    <div>
-      <h1>AI Operations Assistant</h1>
-      <p>Chat interface placeholder. Future integration with AI Agent will appear here.</p>
+    <div className="h-[calc(100vh-4rem)] flex flex-col">
+      <ChatWindow />
     </div>
   );
 }

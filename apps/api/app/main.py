@@ -6,6 +6,7 @@ from sqlalchemy import text
 from app.api.customers import router as customers_router
 from app.api.orders import router as orders_router
 from app.api.tickets import router as tickets_router
+from app.api.chat import router as chat_router
 
 from .dependencies import get_db
 from .models import Base
@@ -20,7 +21,7 @@ app = FastAPI(
 # CORS configuration – allow all origins for local development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,7 +43,9 @@ def health(db: Session = Depends(get_db)):
         pass
     # Return only the status field as expected by the existing tests.
     return {"status": "ok"}
+
 app.include_router(customers_router)
 app.include_router(orders_router)
 app.include_router(tickets_router)
+app.include_router(chat_router)
 
